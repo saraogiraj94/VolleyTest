@@ -8,7 +8,7 @@ public class Stationary {
     private String name;
     private String desc;
     private Long price;
-
+    private String qty;
     public String getImgUrl() {
         return imgUrl;
     }
@@ -39,5 +39,14 @@ public class Stationary {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+
+    public String getQty() {
+        return qty;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
     }
 }
