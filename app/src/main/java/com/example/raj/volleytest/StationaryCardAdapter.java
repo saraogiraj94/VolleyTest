@@ -2,6 +2,7 @@ package com.example.raj.volleytest;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,22 +42,25 @@ public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAd
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Stationary stationary = list.get(position);
         //Loading image from url
-        final String quantity;
+        final String[] quantity = new String[list.size()];
+        Log.d("OnBind","calling on bind");
         imageLoader = Singleton.getInstance().getImageLoader();
         imageLoader.get(stationary.getImgUrl(), ImageLoader.getImageListener(holder.imageView, R.mipmap.ic_launcher, R.drawable.abc_btn_check_material));
         holder.textViewName.setText(stationary.getName());
         holder.textViewPrice.setText(stationary.getPrice().toString());
         holder.textViewPublisher.setText(stationary.getDesc());
         holder.imageView.setImageUrl(stationary.getImgUrl(), imageLoader);
-        quantity=holder.editText.getText().toString();
+
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkText(position);
-                Toast.makeText(context, "Item is added to the cart" + quantity, Toast.LENGTH_LONG).show();
+                quantity[position] =holder.editText.getText().toString();
+                Toast.makeText(context, "Item is added to the cart" + quantity[position], Toast.LENGTH_LONG).show();
             }
         });
+
 
     }
     public void checkText(int position){
@@ -87,6 +91,7 @@ public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAd
             editText = (EditText) itemView.findViewById(R.id.quantity);
             btn = (Button) itemView.findViewById(R.id.add);
         }
+
     }
 
 }
