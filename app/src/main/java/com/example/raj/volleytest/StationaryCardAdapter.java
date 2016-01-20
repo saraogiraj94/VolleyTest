@@ -1,6 +1,9 @@
 package com.example.raj.volleytest;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,8 @@ import java.util.List;
  */
 public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAdapter.ViewHolder> {
     List<Stationary> list;
+    ArrayList<Stationary> l=new ArrayList<Stationary>();
+
     private ImageLoader imageLoader;
     private Context context;
 
@@ -42,6 +48,9 @@ public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAd
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Stationary stationary = list.get(position);
         //Loading image from url
+        int x;
+        final String name=stationary.getName();
+        final Long price=stationary.getPrice();
         final String[] quantity = new String[list.size()];
         Log.d("OnBind","calling on bind");
         imageLoader = Singleton.getInstance().getImageLoader();
@@ -57,7 +66,8 @@ public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAd
             public void onClick(View view) {
                 checkText(position);
                 quantity[position] =holder.editText.getText().toString();
-                Toast.makeText(context, "Item is added to the cart" + quantity[position], Toast.LENGTH_LONG).show();
+           //     Toast.makeText(context, "Item is added to the cart" + quantity[position]+" "+name+" "+price, Toast.LENGTH_LONG).show();
+                pass(name, quantity[position], price);
             }
         });
 
@@ -65,6 +75,41 @@ public class StationaryCardAdapter extends RecyclerView.Adapter<StationaryCardAd
     }
     public void checkText(int position){
         notifyItemChanged(position);
+    }
+
+    public void pass(String name,String q,Long price){
+        l.add(new Stationary(name,q,price));
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.context);
+        alertDialogBuilder.setMessage("Want to Go to Cart");
+        alertDialogBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent intent = new Intent(context,Cart.class);
+                       intent.putParcelableArrayListExtra("list",l);
+                        context.startActivity(intent);
+                    }
+
+                        //Puting the value false for loggedin
+
+                        //Starting login activity
+
+                    }
+                );
+
+        alertDialogBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+
+        //Showing the alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        Toast.makeText(context,l.toString(), Toast.LENGTH_LONG).show();
+
     }
 
     @Override
