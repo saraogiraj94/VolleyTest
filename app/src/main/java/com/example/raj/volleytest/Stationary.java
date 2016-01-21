@@ -13,7 +13,7 @@ public class Stationary implements Parcelable {
     private Long price;
     private String qty;
     public Stationary(){
-        
+
     }
     public Stationary(String name,String qty,Long price){
             this.name=name;
